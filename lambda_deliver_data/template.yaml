@@ -1,0 +1,74 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  GetCurrentAirQualityFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambda_get_current_air_quality
+      Runtime: python3.9
+      CodeUri: .  # Ensures that the code is taken from the current directory
+      Environment:
+        Variables:
+          DB_NAME: !Ref DbName
+          DB_USER: !Ref DbUser
+          DB_PASSWORD: !Ref DbPassword
+          DB_HOST: !Ref DbHost
+          DB_PORT: !Ref DbPort
+      Events:
+        GetCurrentAirQuality:
+          Type: Api
+          Properties:
+            Path: /api/v1/air_quality/current/{location}
+            Method: get
+
+  GetExceedingLocationsFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambda_get_above_avg_locations
+      Runtime: python3.9
+      CodeUri: .  # Ensures that the code is taken from the current directory
+      Environment:
+        Variables:
+          DB_NAME: !Ref DbName
+          DB_USER: !Ref DbUser
+          DB_PASSWORD: !Ref DbPassword
+          DB_HOST: !Ref DbHost
+          DB_PORT: !Ref DbPort
+      Events:
+        GetExceedingLocations:
+          Type: Api
+          Properties:
+            Path: /api/v1/air_quality/above_avg_locations
+            Method: get
+
+  GetAirQualityTrendFunction:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: app.lambda_get_air_quality_trend
+      Runtime: python3.9
+      CodeUri: .  # Ensures that the code is taken from the current directory
+      Environment:
+        Variables:
+          DB_NAME: !Ref DbName
+          DB_USER: !Ref DbUser
+          DB_PASSWORD: !Ref DbPassword
+          DB_HOST: !Ref DbHost
+          DB_PORT: !Ref DbPort
+      Events:
+        GetAirQualityTrend:
+          Type: Api
+          Properties:
+            Path: /api/v1/air_quality/get_air_quality_trend/{location}
+            Method: get
+
+Parameters:
+  DbName:
+    Type: String
+  DbUser:
+    Type: String
+  DbPassword:
+    Type: String
+  DbHost:
+    Type: String
+  DbPort:
+    Type: String
