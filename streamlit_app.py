@@ -18,7 +18,11 @@ def get_data():
     port=os.getenv('DB_PORT')
     )
 
-    query = 'SELECT * FROM import_air_quality'
+    query = """ 
+    SELECT * 
+    FROM air_quality 
+    WHERE report_date BETWEEN (CURRENT_DATE - INTERVAL '1 month') AND CURRENT_DATE;
+    """
     df = pd.read_sql(query, conn)
     conn.close()
     return df
